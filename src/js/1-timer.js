@@ -64,16 +64,26 @@ function convertMs(ms) {
 }
 
 startButton.addEventListener('click', handleButtonElem);
-function handleButtonElem(){
+function handleButtonElem() {
+  if (intervalId) return;
+
+  const diff = dataSelectedUser.getTime() - Date.now();
+  if (diff <= 0) {
+    iziToast.warning({
+      title: 'Warning',
+      message: 'Please choose a date in the future before starting!',
+      position: "topRight",
+    });
+    return;
+  }
+  
   startButton.setAttribute('disabled', '');
-    inputElem.setAttribute("disabled", '');
+  inputElem.setAttribute("disabled", '');
+  setTimer();
+
+  intervalId = setInterval(() => {
     setTimer();
-    if (intervalId) {
-        return;
-    }
-    intervalId = setInterval(()=>{        
-        setTimer();
-    }, 1000);
+  }, 1000);
 }
 
 function setTimer() {
